@@ -137,7 +137,7 @@ class AutoObject extends Collectible
 
             foreach (self::$annotationCache["class"]["method"] as $annotation)
             {
-                if(Strings::startsWith($annotation["name"], "get"))
+                if(Strings::startsWith($annotation["name"], "set"))
                     //if(preg_match($regex, $annotation, $matches))
                 {
                     //if(in_array($name, $matches))
@@ -261,7 +261,7 @@ class AutoObject extends Collectible
 
             foreach (self::$annotationCache["class"]["method"] as $annotation)
             {
-                if(Strings::startsWith($annotation["name"], "get"))
+                if(Strings::startsWith($annotation["name"], "set"))
                     //if(preg_match($regex, $annotation, $matches))
                 {
                     //if(in_array($name, $matches))
@@ -282,8 +282,8 @@ class AutoObject extends Collectible
                 throw new \Exception("Property '$property' was not found in class '$class', so method '$name' could ".
                     "not be called!");
 
-            $class->$$property = $args[0];
-            return self;
+            $class::$$property = $args[0];
+            return;
         }
 
         throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".

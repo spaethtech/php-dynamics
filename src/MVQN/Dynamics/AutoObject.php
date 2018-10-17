@@ -50,9 +50,28 @@ class AutoObject extends Collectible
         self::$annotationCache = $annotationReader->getAnnotations();
     }
 
+    private static function buildStaticAnnotationCache(): void
+    {
+        self::$annotationCache = [];
+
+        $class = get_called_class();
+
+        // Instantiate an Annotation Reader!
+        $annotationReader = new AnnotationReader($class);
+        self::$annotationCache = $annotationReader->getAnnotations();
+    }
+
+
+
+
+    private $firstCallOcurred = false;
+
+
 
     public function __call(string $name, array $args)
     {
+
+
         // Check to see if a real method already exists for the requested __call()...
         if(method_exists($this, $name))
             return $name($args);
@@ -64,7 +83,6 @@ class AutoObject extends Collectible
         {
             $this->buildAnnotationCache();
         }
-
 
         // Handle the cases, where the method called begins with 'get'...
         if(Strings::startsWith($name, "get"))
@@ -82,7 +100,7 @@ class AutoObject extends Collectible
             foreach (self::$annotationCache["class"]["method"] as $annotation)
             {
                 if(Strings::startsWith($annotation["name"], "get"))
-                //if(preg_match($regex, $annotation, $matches))
+                    //if(preg_match($regex, $annotation, $matches))
                 {
                     //if(in_array($name, $matches))
                     {
@@ -120,7 +138,7 @@ class AutoObject extends Collectible
             foreach (self::$annotationCache["class"]["method"] as $annotation)
             {
                 if(Strings::startsWith($annotation["name"], "get"))
-                //if(preg_match($regex, $annotation, $matches))
+                    //if(preg_match($regex, $annotation, $matches))
                 {
                     //if(in_array($name, $matches))
                     {
@@ -148,8 +166,133 @@ class AutoObject extends Collectible
             $class."'!");
     }
 
+
+
+    private static $_beforeFirstCallOcurred = false;
+    private static $_beforeCallOcurred = false;
+
+
     public static function __callStatic(string $name, array $args)
     {
+        $class = get_called_class();
+
+        if(!self::$_beforeFirstCallOcurred)
+        {
+            if(method_exists($class, "__beforeFirstCall"))
+                $class::__beforeFirstCall();
+
+            self::$_beforeFirstCallOcurred = true;
+        }
+
+        if(!self::$_beforeCallOcurred)
+        {
+            if(method_exists($class, "__beforeCall"))
+                $class::__beforeCall();
+
+            self::$_beforeCallOcurred = true;
+        }
+
+
+
+        // Check to see if a real method already exists for the requested __call()...
+        if(method_exists($class, $name))
+            return $name($args);
+
+        $object = new $class();
+
+        // Build the cache for this class, if it has not already been done!
+        if(self::$annotationCache === null)
+        {
+            self::buildStaticAnnotationCache();
+        }
+
+        // Handle the cases, where the method called begins with 'get'...
+        if(Strings::startsWith($name, "get"))
+        {
+            $property = lcfirst(str_replace("get", "", $name));
+
+            if(!array_key_exists("class", self::$annotationCache) ||
+                !array_key_exists("method", self::$annotationCache["class"]))
+                throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
+                    $class."'!");
+
+            $regex = "/^(?:[\w\|\[\]]*)?\s+(get\w*)\s*\(.*\).*$/";
+            $found = false;
+
+            foreach (self::$annotationCache["class"]["method"] as $annotation)
+            {
+                $methodName = $annotation["name"];
+
+                if(Strings::startsWith($annotation["name"], "get"))
+                    //if(preg_match($regex, $annotation, $matches))
+                {
+                    //if(in_array($name, $matches))
+                    {
+                        $found = true;
+                        break;
+                    }
+                }
+            }
+
+            if(!$found)
+                throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
+                    $class."'!");
+
+            // Should be a valid method by this point!
+
+            if(!property_exists($class, $property))
+                throw new \Exception("Property '$property' was not found in class '$class', so method '$name' could ".
+                    "not be called!");
+
+            return $class::$$property;
+        }
+
+        if(Strings::startsWith($name, "set"))
+        {
+            $property = lcfirst(str_replace("set", "", $name));
+
+            if(!array_key_exists("class", self::$annotationCache) ||
+                !array_key_exists("method", self::$annotationCache["class"]))
+                throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
+                    $class."'!");
+
+            //$regex = "/^(?:[\w\|\[\]]*)?\s+(set\w*)\s*\(.*\).*$/";
+            $found = false;
+
+            foreach (self::$annotationCache["class"]["method"] as $annotation)
+            {
+                if(Strings::startsWith($annotation["name"], "get"))
+                    //if(preg_match($regex, $annotation, $matches))
+                {
+                    //if(in_array($name, $matches))
+                    {
+                        $found = true;
+                        break;
+                    }
+                }
+            }
+
+            if(!$found)
+                throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
+                    $class."'!");
+
+            // Should be a valid method by this point!
+
+            if(!property_exists($class, $property))
+                throw new \Exception("Property '$property' was not found in class '$class', so method '$name' could ".
+                    "not be called!");
+
+            $class->$$property = $args[0];
+            return self;
+        }
+
+        throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
+            $class."'!");
+
+
+
+
+
 
     }
 

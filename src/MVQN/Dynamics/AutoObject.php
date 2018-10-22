@@ -168,31 +168,23 @@ class AutoObject extends Collectible
 
 
 
-    private static $_beforeFirstCallOcurred = false;
-    private static $_beforeCallOcurred = false;
-
+    private static $_beforeFirstStaticCallOccurred = false;
+    private static $_afterFirstStaticCallOccurred = false;
 
     public static function __callStatic(string $name, array $args)
     {
         $class = get_called_class();
 
-        if(!self::$_beforeFirstCallOcurred)
+        if(!self::$_beforeFirstStaticCallOccurred)
         {
-            if(method_exists($class, "__beforeFirstCall"))
-                $class::__beforeFirstCall();
+            if(method_exists($class, "__beforeFirstStaticCall"))
+                $class::__beforeFirstStaticCall();
 
-            self::$_beforeFirstCallOcurred = true;
+            self::$_beforeFirstStaticCallOccurred = true;
         }
 
-        if(!self::$_beforeCallOcurred)
-        {
-            if(method_exists($class, "__beforeCall"))
-                $class::__beforeCall();
-
-            self::$_beforeCallOcurred = true;
-        }
-
-
+        if(method_exists($class, "__beforeStaticCall"))
+            $class::__beforeStaticCall();
 
         // Check to see if a real method already exists for the requested __call()...
         if(method_exists($class, $name))
@@ -244,10 +236,22 @@ class AutoObject extends Collectible
                 throw new \Exception("Property '$property' was not found in class '$class', so method '$name' could ".
                     "not be called!");
 
-            return $class::$$property;
-        }
+            $return = $class::$$property;
 
-        if(Strings::startsWith($name, "set"))
+            if(!self::$_afterFirstStaticCallOccurred)
+            {
+                if (method_exists($class, "__afterFirstStaticCall"))
+                    $return = $class::__afterFirstStaticCall($return);
+
+                self::$_afterFirstStaticCallOccurred = true;
+            }
+
+            if(method_exists($class, "__afterStaticCall"))
+                $return = $class::__afterStaticCall($return);
+
+            return $return;
+        }
+        elseif(Strings::startsWith($name, "set"))
         {
             $property = lcfirst(str_replace("set", "", $name));
 
@@ -282,18 +286,28 @@ class AutoObject extends Collectible
                 throw new \Exception("Property '$property' was not found in class '$class', so method '$name' could ".
                     "not be called!");
 
-            $class::$$property = $args[0];
-            return;
+            $value = $args[0];
+
+            if(!self::$_afterFirstStaticCallOccurred)
+            {
+                if (method_exists($class, "__afterFirstStaticCall"))
+                    $value = $class::__afterFirstStaticCall($value);
+
+                self::$_afterFirstStaticCallOccurred = true;
+            }
+
+            if(method_exists($class, "__afterStaticCall"))
+                $value = $class::__afterStaticCall($value);
+
+            $class::$$property = $value;
+        }
+        else
+        {
+            throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
+                $class."'!");
         }
 
-        throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
-            $class."'!");
-
-
-
-
-
-
+        //return null;
     }
 
 

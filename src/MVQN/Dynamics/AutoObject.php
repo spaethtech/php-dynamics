@@ -312,6 +312,4 @@ class AutoObject extends Collectible
 
 
 
-
-
 }

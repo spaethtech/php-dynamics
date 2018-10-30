@@ -46,5 +46,4 @@ class AutoObjectTests extends PHPUnit\Framework\TestCase
 
 
 
-
 }

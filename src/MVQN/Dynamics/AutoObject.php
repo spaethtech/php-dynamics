@@ -43,61 +43,76 @@ class AutoObject extends Collectible
 
     private function buildAnnotationCache(): void
     {
-        self::$annotationCache = [];
+        $class = get_class($this);
+
+        if(self::$annotationCache === null)
+            self::$annotationCache = [];
+
+        self::$annotationCache[$class] = [];
 
         // Instantiate an Annotation Reader!
-        $annotationReader = new AnnotationReader(get_class($this));
-        self::$annotationCache = $annotationReader->getAnnotations();
+        $annotationReader = new AnnotationReader($class);
+        self::$annotationCache[$class] = $annotationReader->getAnnotations();
     }
 
     private static function buildStaticAnnotationCache(): void
     {
-        self::$annotationCache = [];
-
         $class = get_called_class();
+
+        if(self::$annotationCache === null)
+            self::$annotationCache = [];
+
+        self::$annotationCache[$class] = [];
 
         // Instantiate an Annotation Reader!
         $annotationReader = new AnnotationReader($class);
-        self::$annotationCache = $annotationReader->getAnnotations();
+        self::$annotationCache[$class] = $annotationReader->getAnnotations();
     }
 
 
 
 
-    private $firstCallOcurred = false;
-
-
+    private $beforeFirstCallOcurred = false;
+    private $afterFirstCallOcurred = false;
 
     public function __call(string $name, array $args)
     {
+        $class = get_class($this);
 
+        if(!$this->beforeFirstCallOcurred)
+        {
+            if(method_exists($class, "__beforeFirstCall"))
+                $class->__beforeFirstCall();
+
+            $this->beforeFirstCallOcurred = true;
+        }
+
+        if(method_exists($class, "__beforeCall"))
+            $class->__beforeCall();
 
         // Check to see if a real method already exists for the requested __call()...
         if(method_exists($this, $name))
             return $name($args);
 
-        $class = get_class($this);
-
         // Build the cache for this class, if it has not already been done!
-        if(self::$annotationCache === null)
-        {
+        if (self::$annotationCache === null || !array_key_exists($class, self::$annotationCache) ||
+            self::$annotationCache[$class] === null)
             $this->buildAnnotationCache();
-        }
 
         // Handle the cases, where the method called begins with 'get'...
         if(Strings::startsWith($name, "get"))
         {
             $property = lcfirst(str_replace("get", "", $name));
 
-            if(!array_key_exists("class", self::$annotationCache) ||
-                !array_key_exists("method", self::$annotationCache["class"]))
+            if(!array_key_exists("class", self::$annotationCache[$class]) ||
+                !array_key_exists("method", self::$annotationCache[$class]["class"]))
                 throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
                     $class."'!");
 
             $regex = "/^(?:[\w\|\[\]]*)?\s+(get\w*)\s*\(.*\).*$/";
             $found = false;
 
-            foreach (self::$annotationCache["class"]["method"] as $annotation)
+            foreach (self::$annotationCache[$class]["class"]["method"] as $annotation)
             {
                 if(Strings::startsWith($annotation["name"], "get"))
                     //if(preg_match($regex, $annotation, $matches))
@@ -120,6 +135,17 @@ class AutoObject extends Collectible
                 throw new \Exception("Property '$property' was not found in class '$class', so method '$name' could ".
                     "not be called!");
 
+            if(!$this->afterFirstCallOcurred)
+            {
+                if (method_exists($class, "__afterFirstCall"))
+                    $return = $class->__afterFirstCall($return);
+
+                $this->afterFirstCallOcurred = true;
+            }
+
+            if(method_exists($class, "__afterCall"))
+                $return = $class->__afterCall($return);
+
             return $this->{$property};
         }
 
@@ -127,15 +153,15 @@ class AutoObject extends Collectible
         {
             $property = lcfirst(str_replace("set", "", $name));
 
-            if(!array_key_exists("class", self::$annotationCache) ||
-                !array_key_exists("method", self::$annotationCache["class"]))
+            if(!array_key_exists("class", self::$annotationCache[$class]) ||
+                !array_key_exists("method", self::$annotationCache[$class]["class"]))
                 throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
                     $class."'!");
 
             //$regex = "/^(?:[\w\|\[\]]*)?\s+(set\w*)\s*\(.*\).*$/";
             $found = false;
 
-            foreach (self::$annotationCache["class"]["method"] as $annotation)
+            foreach (self::$annotationCache[$class]["class"]["method"] as $annotation)
             {
                 if(Strings::startsWith($annotation["name"], "set"))
                     //if(preg_match($regex, $annotation, $matches))
@@ -158,8 +184,20 @@ class AutoObject extends Collectible
                 throw new \Exception("Property '$property' was not found in class '$class', so method '$name' could ".
                     "not be called!");
 
-            $this->{$property} = $args[0];
-            return $this;
+            $value = $args[0];
+
+            if (!$this->afterFirstCallOcurred)
+            {
+                if (method_exists($class, "__afterFirstCall"))
+                    $value = $class->__afterFirstCall($value);
+
+                $this->afterFirstCallOcurred = true;
+            }
+
+            if(method_exists($class, "__afterCall"))
+                $value = $class->__afterCall($value);
+
+            $this->{$property} = $value;
         }
 
         throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
@@ -168,19 +206,20 @@ class AutoObject extends Collectible
 
 
 
-    private static $_beforeFirstStaticCallOccurred = false;
-    private static $_afterFirstStaticCallOccurred = false;
+    private static $_beforeFirstStaticCallOccurred = [];
+    private static $_afterFirstStaticCallOccurred = [];
 
     public static function __callStatic(string $name, array $args)
     {
         $class = get_called_class();
 
-        if(!self::$_beforeFirstStaticCallOccurred)
+        if(!array_key_exists($class, self::$_beforeFirstStaticCallOccurred) ||
+            !self::$_beforeFirstStaticCallOccurred[$class])
         {
             if(method_exists($class, "__beforeFirstStaticCall"))
                 $class::__beforeFirstStaticCall();
 
-            self::$_beforeFirstStaticCallOccurred = true;
+            self::$_beforeFirstStaticCallOccurred[$class] = true;
         }
 
         if(method_exists($class, "__beforeStaticCall"))
@@ -193,25 +232,31 @@ class AutoObject extends Collectible
         $object = new $class();
 
         // Build the cache for this class, if it has not already been done!
-        if(self::$annotationCache === null)
+        if (self::$annotationCache === null || !array_key_exists($class, self::$annotationCache) ||
+            self::$annotationCache[$class] === null)
+            self::buildStaticAnnotationCache();
+
+        /*
+        if(!array_key_exists($class, self::$annotationCache) || self::$annotationCache[$class] === null)
         {
             self::buildStaticAnnotationCache();
         }
+        */
 
         // Handle the cases, where the method called begins with 'get'...
         if(Strings::startsWith($name, "get"))
         {
             $property = lcfirst(str_replace("get", "", $name));
 
-            if(!array_key_exists("class", self::$annotationCache) ||
-                !array_key_exists("method", self::$annotationCache["class"]))
+            if (!array_key_exists("class", self::$annotationCache[$class]) ||
+                !array_key_exists("method", self::$annotationCache[$class]["class"]))
                 throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
                     $class."'!");
 
             $regex = "/^(?:[\w\|\[\]]*)?\s+(get\w*)\s*\(.*\).*$/";
             $found = false;
 
-            foreach (self::$annotationCache["class"]["method"] as $annotation)
+            foreach (self::$annotationCache[$class]["class"]["method"] as $annotation)
             {
                 $methodName = $annotation["name"];
 
@@ -255,15 +300,15 @@ class AutoObject extends Collectible
         {
             $property = lcfirst(str_replace("set", "", $name));
 
-            if(!array_key_exists("class", self::$annotationCache) ||
-                !array_key_exists("method", self::$annotationCache["class"]))
+            if(!array_key_exists("class", self::$annotationCache[$class]) ||
+                !array_key_exists("method", self::$annotationCache[$class]["class"]))
                 throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
                     $class."'!");
 
             //$regex = "/^(?:[\w\|\[\]]*)?\s+(set\w*)\s*\(.*\).*$/";
             $found = false;
 
-            foreach (self::$annotationCache["class"]["method"] as $annotation)
+            foreach (self::$annotationCache[$class]["class"]["method"] as $annotation)
             {
                 if(Strings::startsWith($annotation["name"], "set"))
                     //if(preg_match($regex, $annotation, $matches))
@@ -288,12 +333,13 @@ class AutoObject extends Collectible
 
             $value = $args[0];
 
-            if(!self::$_afterFirstStaticCallOccurred)
+            if (!array_key_exists($class, self::$_afterFirstStaticCallOccurred) ||
+                !self::$_afterFirstStaticCallOccurred[$class])
             {
                 if (method_exists($class, "__afterFirstStaticCall"))
                     $value = $class::__afterFirstStaticCall($value);
 
-                self::$_afterFirstStaticCallOccurred = true;
+                self::$_afterFirstStaticCallOccurred[$class] = true;
             }
 
             if(method_exists($class, "__afterStaticCall"))

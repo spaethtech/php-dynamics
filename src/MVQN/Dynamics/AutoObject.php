@@ -72,8 +72,8 @@ class AutoObject extends Collectible
 
 
 
-    private $beforeFirstCallOcurred = false;
-    private $afterFirstCallOcurred = false;
+    private $_beforeFirstCallOcurred = false;
+    private $_afterFirstCallOcurred = false;
 
     public function __call(string $name, array $args)
     {
@@ -114,7 +114,8 @@ class AutoObject extends Collectible
 
             foreach (self::$annotationCache[$class]["class"]["method"] as $annotation)
             {
-                if(Strings::startsWith($annotation["name"], "get"))
+                //if(Strings::startsWith($annotation["name"], "get"))
+                if($annotation["name"] === $name)
                     //if(preg_match($regex, $annotation, $matches))
                 {
                     //if(in_array($name, $matches))
@@ -148,8 +149,7 @@ class AutoObject extends Collectible
 
             return $this->{$property};
         }
-
-        if(Strings::startsWith($name, "set"))
+        else if(Strings::startsWith($name, "set"))
         {
             $property = lcfirst(str_replace("set", "", $name));
 
@@ -163,7 +163,8 @@ class AutoObject extends Collectible
 
             foreach (self::$annotationCache[$class]["class"]["method"] as $annotation)
             {
-                if(Strings::startsWith($annotation["name"], "set"))
+                //if(Strings::startsWith($annotation["name"], "set"))
+                if($annotation["name"] === $name)
                     //if(preg_match($regex, $annotation, $matches))
                 {
                     //if(in_array($name, $matches))
@@ -199,9 +200,13 @@ class AutoObject extends Collectible
 
             $this->{$property} = $value;
         }
+        else
+        {
+            throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
+                $class."'!");
+        }
 
-        throw new \Exception("Method '$name' was either not defined or does not have an annotation in class '".
-            $class."'!");
+
     }
 
 
@@ -260,7 +265,8 @@ class AutoObject extends Collectible
             {
                 $methodName = $annotation["name"];
 
-                if(Strings::startsWith($annotation["name"], "get"))
+                //if(Strings::startsWith($annotation["name"], "get"))
+                if($annotation["name"] === $name)
                     //if(preg_match($regex, $annotation, $matches))
                 {
                     //if(in_array($name, $matches))
@@ -310,7 +316,8 @@ class AutoObject extends Collectible
 
             foreach (self::$annotationCache[$class]["class"]["method"] as $annotation)
             {
-                if(Strings::startsWith($annotation["name"], "set"))
+                //if(Strings::startsWith($annotation["name"], "set"))
+                if($annotation["name"] === $name)
                     //if(preg_match($regex, $annotation, $matches))
                 {
                     //if(in_array($name, $matches))

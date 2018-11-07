@@ -79,12 +79,12 @@ class AutoObject extends Collectible
     {
         $class = get_class($this);
 
-        if(!$this->beforeFirstCallOcurred)
+        if(!$this->_beforeFirstCallOcurred)
         {
             if(method_exists($class, "__beforeFirstCall"))
                 $class->__beforeFirstCall();
 
-            $this->beforeFirstCallOcurred = true;
+            $this->_beforeFirstCallOcurred = true;
         }
 
         if(method_exists($class, "__beforeCall"))
@@ -136,12 +136,12 @@ class AutoObject extends Collectible
                 throw new \Exception("Property '$property' was not found in class '$class', so method '$name' could ".
                     "not be called!");
 
-            if(!$this->afterFirstCallOcurred)
+            if(!$this->_afterFirstCallOcurred)
             {
                 if (method_exists($class, "__afterFirstCall"))
                     $return = $class->__afterFirstCall($return);
 
-                $this->afterFirstCallOcurred = true;
+                $this->_afterFirstCallOcurred = true;
             }
 
             if(method_exists($class, "__afterCall"))
@@ -187,12 +187,12 @@ class AutoObject extends Collectible
 
             $value = $args[0];
 
-            if (!$this->afterFirstCallOcurred)
+            if (!$this->_afterFirstCallOcurred)
             {
                 if (method_exists($class, "__afterFirstCall"))
                     $value = $class->__afterFirstCall($value);
 
-                $this->afterFirstCallOcurred = true;
+                $this->_afterFirstCallOcurred = true;
             }
 
             if(method_exists($class, "__afterCall"))

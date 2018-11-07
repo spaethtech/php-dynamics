@@ -199,6 +199,7 @@ class AutoObject extends Collectible
                 $value = $class->__afterCall($value);
 
             $this->{$property} = $value;
+            return $this;
         }
         else
         {

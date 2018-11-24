@@ -38,6 +38,15 @@ class AutoObject extends Collectible
     ];
 
 
+    public function __construct(array $values = [])
+    {
+        if($values === null || $values === [])
+            return;
+
+        foreach($values as $property => $value)
+            if(property_exists($this, $property))
+                $this->$property = $value;
+    }
 
 
 

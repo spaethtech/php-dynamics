@@ -16,7 +16,7 @@ class AutoObjectTests extends TestCase
 
     protected function setUp(): void
     {
-        $this->country = new Country([ "id" => 249, "name" => "United States", "code" => "US", "currency_code" => "USD"]);
+        $this->country = new Country([ "id" => 249, "name" => "United States", "code" => "US", "currency" => "USD"]);
         //$this->country = new Country();
     }
 

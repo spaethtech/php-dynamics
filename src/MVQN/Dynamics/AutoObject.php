@@ -6,6 +6,7 @@ namespace MVQN\Dynamics;
 
 use MVQN\Annotations\AnnotationReader;
 use MVQN\Collections\Collectible;
+use MVQN\Common\Casings;
 use MVQN\Common\Strings;
 
 /**
@@ -44,8 +45,25 @@ class AutoObject extends Collectible
             return;
 
         foreach($values as $property => $value)
+        {
             if(property_exists($this, $property))
+            {
                 $this->$property = $value;
+            }
+            else
+            {
+                if(Strings::contains($property, "_"))
+                {
+                    $camel = Casings::snake2camel($property);
+
+                    if(property_exists($this, $camel))
+                    {
+                        $this->$camel = $value;
+                    }
+
+                }
+            }
+        }
     }
 
 

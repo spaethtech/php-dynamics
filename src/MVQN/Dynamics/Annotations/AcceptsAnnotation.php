@@ -32,21 +32,21 @@ final class AcceptsAnnotation extends Annotation
 
             if (preg_match(self::ANNOTATION_PATTERN_IDENTIFIER, $value, $matches))
             {
-                $value = ["\"{$value}\""];
-                echo "LITERAL";
+                $value = [ "$value" ];
+                //echo "LITERAL";
             }
             else if (preg_match(self::ANNOTATION_PATTERN_IDENTIFIER_STRING, $value, $matches))
             {
-                $value = [$value];
-                echo "STRING";
+                $value = [ str_replace("'", "", $value) ]; // Remove extraneous single-quotes!
+                //echo "STRING";
             }
             else
             {
                 $value = eval("return {$value};");
-                echo "ARRAY";
+                //echo "ARRAY";
             }
 
-            var_dump($value);
+            //var_dump($value);
 
             $existing["Accepts"] = $value;
 

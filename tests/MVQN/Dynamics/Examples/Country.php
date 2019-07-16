@@ -44,7 +44,7 @@ final class Country extends AutoObject
 
     /**
      * @var string
-     * @Accepts "currency_code"
+     * @Accepts 'currency_code'
      */
     protected $currencyCode;
 

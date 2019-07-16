@@ -63,8 +63,8 @@ class AutoObject extends Collectible
 
                 foreach($properties as $prop)
                 {
-                    if(array_key_exists("Accepts", $prop))
-                        var_dump($prop["Accepts"]);
+                    //if(array_key_exists("Accepts", $prop))
+                    //    var_dump($prop["Accepts"]);
 
                     if(array_key_exists("Accepts", $prop) && in_array($property, $prop["Accepts"]))
                         $this->{$prop["var"]["name"]} = $value;

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-
-namespace Tests\MVQN\Dynamics\Examples;
+namespace MVQN\Dynamics\Examples;
 
 use MVQN\Dynamics\AutoObject;
+use MVQN\Dynamics\Annotations\AcceptsAnnotation as Accepts;
 
 /**
  * Class Country
@@ -42,6 +42,11 @@ final class Country extends AutoObject
      */
     protected $code;
 
+    /**
+     * @var string
+     * @Accepts "currency_code"
+     */
+    protected $currencyCode;
 
     /**
      * @var string

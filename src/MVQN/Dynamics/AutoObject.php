@@ -44,6 +44,8 @@ class AutoObject extends Collectible
         if($values === null || $values === [])
             return;
 
+
+
         foreach($values as $property => $value)
         {
             if(property_exists($this, $property))
@@ -52,6 +54,24 @@ class AutoObject extends Collectible
             }
             else
             {
+                $class = get_class($this);
+
+                if(!self::$annotationCache || !array_key_exists($class, self::$annotationCache))
+                    $this->buildAnnotationCache();
+
+                $properties = self::$annotationCache[get_class($this)]["properties"];
+
+                foreach($properties as $prop)
+                {
+                    if(array_key_exists("Accepts", $prop))
+                        var_dump($prop["Accepts"]);
+
+                    if(array_key_exists("Accepts", $prop) && in_array($property, $prop["Accepts"]))
+                        $this->{$prop["var"]["name"]} = $value;
+                }
+
+
+                /*
                 if(Strings::contains($property, "_"))
                 {
                     $camel = Casings::snake2camel($property);
@@ -62,9 +82,11 @@ class AutoObject extends Collectible
                     }
 
                 }
+                */
             }
         }
     }
+
 
 
 

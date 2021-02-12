@@ -1,10 +1,10 @@
-# mvqn/common
-A library of common classes and functions, specifically designed for use in MVQN projects, but generic enough for anything!
+# rspaeth/common
+A library of common classes and functions, specifically designed for use in my own projects!
 
 ## Installation
 Install the latest version with
 ```bash
-composer require mvqn/common
+composer require rspaeth/common
 ```
 
 ## Basic Usage
@@ -27,11 +27,11 @@ COMING SOON
 COMING SOON!
 
 ### Related Packages
-[mvqn/annotations](https://github.com/mvqn/annotations)\
+[mvqn/annotations](https://github.com/rspaeth/annotations)\
 
 
 ### Submitting bugs and feature requests
-Bugs and feature request are tracked on [Github](https://github.com/mvqn/common/issues)
+Bugs and feature request are tracked on [Github](https://github.com/rspaeth/dynamics/issues)
 
 ### Author
 Ryan Spaeth <[rspaeth@mvqn.net](mailto:rspaeth@mvqn.net)>

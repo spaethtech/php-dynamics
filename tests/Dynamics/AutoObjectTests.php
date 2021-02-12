@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace MVQN\Dynamics;
+namespace rspaeth\Dynamics;
 
-use MVQN\Dynamics\Examples\Country;
+use rspaeth\Dynamics\Examples\Country;
 use PHPUnit\Framework\TestCase;
 
 

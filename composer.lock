@@ -4,39 +4,39 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "81d4ca0a40bef090993d1a96948c0846",
+    "content-hash": "216b837b135ae33cc46af73877bfe5c2",
     "packages": [
         {
-            "name": "rspaeth/annotations",
+            "name": "mvqn/annotations",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/mvqn/annotations.git",
+                "reference": "f4dd19c0ae03d1d65ec8768e44266f8259206de6"
+            },
             "dist": {
-                "type": "path",
-                "url": "../annotations",
-                "reference": "43879ee61310e299ccbc526eea9cfeb94d88f53e"
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/mvqn%2Fannotations/repository/archive.zip?sha=f4dd19c0ae03d1d65ec8768e44266f8259206de6",
+                "reference": "f4dd19c0ae03d1d65ec8768e44266f8259206de6",
+                "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
-                "php": "~7.3",
-                "rspaeth/common": "*"
+                "mvqn/common": "dev-master",
+                "php": "~7.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "~9"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "rspaeth\\": "./src/"
+                    "MVQN\\": "./src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "rspaeth\\": [
-                        "./tests/",
-                        "./examples/"
-                    ]
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -47,17 +47,24 @@
                 }
             ],
             "description": "A semi-complex PHP-Doc Annotation parsing library, specifically designed for use in my own projects!",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "issues": "https://gitlab.com/api/v4/projects/14659797/issues"
+            },
+            "time": "2021-02-13T02:30:01+00:00"
         },
         {
-            "name": "rspaeth/collections",
+            "name": "mvqn/collections",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/mvqn/collections.git",
+                "reference": "57987a212ca03fa90ec0bacae657eed93a430bf4"
+            },
             "dist": {
-                "type": "path",
-                "url": "../collections",
-                "reference": "4aa382cf9f657243749706324c7b28694a06ac39"
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/mvqn%2Fcollections/repository/archive.zip?sha=57987a212ca03fa90ec0bacae657eed93a430bf4",
+                "reference": "57987a212ca03fa90ec0bacae657eed93a430bf4",
+                "shasum": ""
             },
             "require": {
                 "ext-json": "*",
@@ -66,17 +73,14 @@
             "require-dev": {
                 "phpunit/phpunit": "~9"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "rspaeth\\": "./src/"
+                    "MVQN\\": "./src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "rspaeth\\": "./tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -87,17 +91,24 @@
                 }
             ],
             "description": "A library for collections, specifically designed for use in my own projects!",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "issues": "https://gitlab.com/api/v4/projects/14659798/issues"
+            },
+            "time": "2021-02-13T02:32:36+00:00"
         },
         {
-            "name": "rspaeth/common",
+            "name": "mvqn/common",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/mvqn/common.git",
+                "reference": "82d3ddcfc49cfd1a0d3a2f721c49a753354dec98"
+            },
             "dist": {
-                "type": "path",
-                "url": "../common",
-                "reference": "18391593f4f0461a0b9410882fabcdbe35a24828"
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/mvqn%2Fcommon/repository/archive.zip?sha=82d3ddcfc49cfd1a0d3a2f721c49a753354dec98",
+                "reference": "82d3ddcfc49cfd1a0d3a2f721c49a753354dec98",
+                "shasum": ""
             },
             "require": {
                 "ext-json": "*",
@@ -112,6 +123,7 @@
                 "phpunit/phpunit": "~9",
                 "twig/twig": "^2.11"
             },
+            "default-branch": true,
             "bin": [
                 "./bin/phpdoc-md"
             ],
@@ -121,16 +133,7 @@
                     "rspaeth\\": "./src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "rspaeth\\": "./tests/"
-                }
-            },
-            "scripts": {
-                "document": [
-                    "\\rspaeth\\Common\\Documentation::generate"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -141,9 +144,10 @@
                 }
             ],
             "description": "A library of common classes and functions, specifically designed for use in my own projects!",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "issues": "https://gitlab.com/api/v4/projects/14659799/issues"
+            },
+            "time": "2021-02-13T02:24:35+00:00"
         }
     ],
     "packages-dev": [
@@ -2236,7 +2240,11 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "mvqn/common": 20,
+        "mvqn/annotations": 20,
+        "mvqn/collections": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

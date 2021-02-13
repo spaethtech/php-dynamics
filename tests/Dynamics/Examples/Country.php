@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace rspaeth\Dynamics\Examples;
+namespace MVQN\Dynamics\Examples;
 
-use rspaeth\Dynamics\AutoObject;
-use rspaeth\Dynamics\Annotations\AcceptsAnnotation as Accepts;
+use MVQN\Dynamics\AutoObject;
+use MVQN\Dynamics\Annotations\AcceptsAnnotation as Accepts;
 
 /**
  * Class Country

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace rspaeth\Dynamics\Annotations;
+namespace MVQN\Dynamics\Annotations;
 
-use rspaeth\Annotations\Annotation;
-use rspaeth\Annotations\Exceptions\AnnotationParsingException;
+use MVQN\Annotations\Annotation;
+use MVQN\Annotations\Exceptions\AnnotationParsingException;
 
 
 final class AcceptsAnnotation extends Annotation

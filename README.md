@@ -27,14 +27,14 @@ COMING SOON
 COMING SOON!
 
 ### Related Packages
-[mvqn/annotations](https://github.com/rspaeth/annotations)\
+[spaethtech/annotations](https://github.com/rspaeth/annotations)\
 
 
 ### Submitting bugs and feature requests
 Bugs and feature request are tracked on [Github](https://github.com/rspaeth/dynamics/issues)
 
 ### Author
-Ryan Spaeth <[rspaeth@mvqn.net](mailto:rspaeth@mvqn.net)>
+Ryan Spaeth <[rspaeth@spaethtech.com](mailto:rspaeth@spaethtech.com)>
 
 ### License
 This module is licensed under the MIT License - see the `LICENSE` file for details.

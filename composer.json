@@ -1,32 +1,32 @@
 {
-    "name": "mvqn/dynamics",
+    "name": "spaethtech/dynamics",
     "description": "A library for dynamic objects and methods.",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Ryan Spaeth",
-            "email": "rspaeth@mvqn.net"
+            "email": "rspaeth@spaethtech.com"
         }
     ],
     "require": {
         "php": "~7.3",
         "ext-json": "*",
-        "mvqn/common": "dev-master",
-        "mvqn/annotations": "dev-master",
-        "mvqn/collections": "dev-master"
+        "spaethtech/common": "dev-master",
+        "spaethtech/annotations": "dev-master",
+        "spaethtech/collections": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "~9"
     },
     "autoload": {
         "psr-4": {
-            "MVQN\\": "./src/"
+            "SpaethTech\\": "./src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "MVQN\\": "./tests/"
+            "SpaethTech\\": "./tests/"
         }
     },
 

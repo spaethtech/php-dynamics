@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
-namespace MVQN\Dynamics\Examples;
+namespace SpaethTech\Dynamics\Examples;
 
-use MVQN\Dynamics\AutoObject;
-use MVQN\Dynamics\Annotations\AcceptsAnnotation as Accepts;
+use SpaethTech\Dynamics\AutoObject;
+use SpaethTech\Dynamics\Annotations\AcceptsAnnotation as Accepts;
 
 /**
  * Class Country
  *
  * @package UCRM\REST\Endpoints
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @author Ryan Spaeth <rspaeth@spaethtech.com>
  * @final
  *
  * @method string|null getName()

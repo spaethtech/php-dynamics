@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace MVQN\Dynamics\Annotations;
+namespace SpaethTech\Dynamics\Annotations;
 
-use MVQN\Annotations\Annotation;
-use MVQN\Annotations\Exceptions\AnnotationParsingException;
+use SpaethTech\Annotations\Annotation;
+use SpaethTech\Annotations\Exceptions\AnnotationParsingException;
 
 
 final class AcceptsAnnotation extends Annotation

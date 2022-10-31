@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace MVQN\Dynamics;
+namespace SpaethTech\Dynamics;
 
-use MVQN\Dynamics\Examples\Country;
+use SpaethTech\Dynamics\Examples\Country;
 use PHPUnit\Framework\TestCase;
 
 
@@ -42,7 +42,7 @@ class AutoObjectTests extends TestCase
         //echo "Country->getId()   : $id\n";
         echo "Country->getName() : $name\n";
         echo "Country->getCode() : $code\n";
-        
+
         //$this->assertEquals(249, $id);
         $this->assertEquals("United States", $name);
         $this->assertEquals("US", $code);

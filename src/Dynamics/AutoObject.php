@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace MVQN\Dynamics;
+namespace SpaethTech\Dynamics;
 
 
-use MVQN\Annotations\AnnotationReader;
-use MVQN\Collections\Collectible;
-use MVQN\Common\Casings;
-use MVQN\Common\Strings;
+use SpaethTech\Annotations\AnnotationReader;
+use SpaethTech\Collections\Collectible;
+use SpaethTech\Common\Casings;
+use SpaethTech\Common\Strings;
 
 /**
  * Class AutoObject
  *
- * @package MVQN\Common
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @package SpaethTech\Common
+ * @author Ryan Spaeth <rspaeth@spaethtech.com>
  */
 class AutoObject extends Collectible
 {

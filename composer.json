@@ -12,9 +12,9 @@
     "require": {
         "php": "~7.3",
         "ext-json": "*",
-        "spaethtech/common": "dev-master",
-        "spaethtech/annotations": "dev-master",
-        "spaethtech/collections": "dev-master"
+        "spaethtech/common": "*",
+        "spaethtech/annotations": "*",
+        "spaethtech/collections": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "~9"

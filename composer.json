@@ -1,5 +1,5 @@
 {
-    "name": "spaethtech/dynamics",
+    "name": "spaethtech/php-dynamics",
     "description": "A library for dynamic objects and methods.",
     "type": "library",
     "license": "MIT",
